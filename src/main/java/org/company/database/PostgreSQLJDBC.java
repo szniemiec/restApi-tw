@@ -5,42 +5,36 @@ import org.company.services.JSONService;
 
 import java.sql.*;
 
-public class PostgreSQLJDBC {
+public class PostgreSQLJDBC implements ConnectionFactory {
 
     private Connection c;
-    private final DbCredentials credentials;
 
-    private String jdbcDriver;
-    private String userLogin;
-    private String userPassword;
-    private String databaseUrl;
+    private final String jdbcDriver;
+    private final String userLogin;
+    private final String userPassword;
+    private final String databaseUrl;
 
-    public PostgreSQLJDBC() {
-        JSONService jsonService = new JSONService();
-        credentials = jsonService.readEnvironment();
-        System.out.println("credentials = " + credentials.toString());
-        this.c = connect(credentials);
-    }
+//    public PostgreSQLJDBC() {
+//        JSONService jsonService = new JSONService();
+//        credentials = jsonService.readEnvironment();
+//        System.out.println("credentials = " + credentials.toString());
+////        this.c = connect(credentials);
+//    }
 
     public PostgreSQLJDBC(JSONService jsonService) {
         System.out.println("Bartosz connector");
 
-        credentials = jsonService.readEnvironment();
+        DbCredentials credentials = jsonService.readEnvironment();
         this.databaseUrl = credentials.getDatabaseUrl();
         this.jdbcDriver = credentials.getJdbcDriver();
         this.userLogin = credentials.getLogin();
         this.userPassword = credentials.getPassword();
 
         System.out.println("credentials = " + credentials.toString());
-        this.c = connect(credentials);
+        this.c = connect();
     }
 
-    private Connection connect(DbCredentials databaseCredentials) {
-        String HOST = databaseCredentials.getHost();
-        String PORT = databaseCredentials.getPort();
-        String DATABASE = databaseCredentials.getDatabase();
-        String LOGIN = databaseCredentials.getLogin();
-        String PASSWORD = databaseCredentials.getPassword();
+    public Connection connect() {
         try {
             Class.forName(this.jdbcDriver);
             this.c = DriverManager.getConnection(this.databaseUrl, this.userLogin, this.userPassword);
@@ -58,7 +52,7 @@ public class PostgreSQLJDBC {
         return this.c;
     }
 
-    public void disconnect() throws SQLException {
+    public void disconnect() {
         try {
             this.c.close();
         } catch (SQLException e) {

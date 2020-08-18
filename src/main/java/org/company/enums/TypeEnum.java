@@ -6,7 +6,8 @@ public enum TypeEnum {
     WATER(2),
     GRASS(3),
     ELECTRIC(4),
-    POISON(5);
+    POISON(5),
+    NONE(6); // DEFAULT TYPE
 
     private final int typeId;
 
