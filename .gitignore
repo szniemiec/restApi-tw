@@ -1,7 +1,7 @@
 .idea
 *.iml
 target
-src/main/resources/environmentSpecs
+src/main/resources/environmentSpecs/environment.json
 
 
 .idea/
