@@ -1,4 +1,4 @@
 .idea
 *.iml
 target
-enviroment.json
+environment.json

@@ -9,11 +9,11 @@ import java.nio.file.Paths;
 
 public class JSONService {
 
-    public DbCredentials readEnviroment() {
+    public DbCredentials readEnvironment() {
 
         try {
             Gson gson = new Gson();
-            BufferedReader reader = Files.newBufferedReader(Paths.get("enviroment.json"));
+            BufferedReader reader = Files.newBufferedReader(Paths.get("environment.json"));
             DbCredentials credentials = gson.fromJson(reader, DbCredentials.class);
             reader.close();
             return credentials;
