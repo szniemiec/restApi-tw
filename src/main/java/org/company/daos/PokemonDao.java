@@ -4,6 +4,7 @@ import org.company.database.PostgreSQLJDBC;
 import org.company.enums.TypeEnum;
 import org.company.exceptions.TypeIdException;
 import org.company.models.Pokemon;
+import org.company.services.JSONService;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -16,10 +17,18 @@ public class PokemonDao {
 
     private PostgreSQLJDBC database = null;
 
+    public PokemonDao(PostgreSQLJDBC database, JSONService jsonService) {
+        this.database = new PostgreSQLJDBC(jsonService);
+    }
+
+    public PokemonDao(JSONService jsonService) {
+        this.database = new PostgreSQLJDBC(jsonService);
+    }
+
     public List<Pokemon> loadAll() {
         final String SELECT_SQL = "SELECT * FROM pokemons;";
         try {
-            database = new PostgreSQLJDBC();
+//            database = new PostgreSQLJDBC();
             Statement st = database.getConnection().createStatement();
             ResultSet rs = st.executeQuery(SELECT_SQL);
             List<Pokemon> pokemons = new ArrayList<>();
@@ -39,7 +48,7 @@ public class PokemonDao {
     public Pokemon get(Serializable id) {
         final String SELECT_SQL = "SELECT * FROM pokemons WHERE id = " + id + ";";
         try {
-            database = new PostgreSQLJDBC();
+//            database = new PostgreSQLJDBC();
             Statement st = database.getConnection().createStatement();
             ResultSet rs = st.executeQuery(SELECT_SQL);
             if (rs.next()) {
