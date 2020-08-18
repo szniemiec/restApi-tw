@@ -1,13 +1,10 @@
 package org.company;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import org.company.database.PostgreSQLJDBC;
+
+public class App {
+
+    public static void main(String[] args) {
+        PostgreSQLJDBC database = new PostgreSQLJDBC();
     }
 }
