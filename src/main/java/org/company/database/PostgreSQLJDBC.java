@@ -13,7 +13,7 @@ public class PostgreSQLJDBC {
 
     public PostgreSQLJDBC() {
         JSONService jsonService = new JSONService();
-        DbCredentials credentials = jsonService.readEnviroment();
+        DbCredentials credentials = jsonService.readEnvironment();
         this.c = connect(credentials);
     }
 
