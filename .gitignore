@@ -123,16 +123,12 @@ fabric.properties
 hs_err_pid*
 
 
-.~lock.presnetationBattleOfCards.odp#
+# VISUAL CODE STUDIO
 .sts4-cache
 .settings
 .project
 .classpath
 target/
-#pom.xml
-#pom.xml.releaseBackup
-#pom.xml.versionsBackup
-#pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
