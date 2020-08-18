@@ -2,10 +2,10 @@
 *.iml
 target
 src/main/resources/environmentSpecs/environment.json
+src/main/resources/environmentSpecifications/environment.json
+#src/main/resources/environmentSpecifications/
 
 
-.idea/
-*.iml
 
 
 #memoryGame.iml
@@ -126,16 +126,12 @@ fabric.properties
 hs_err_pid*
 
 
-.~lock.presnetationBattleOfCards.odp#
+# VISUAL CODE STUDIO
 .sts4-cache
 .settings
 .project
 .classpath
 target/
-#pom.xml
-#pom.xml.releaseBackup
-#pom.xml.versionsBackup
-#pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
