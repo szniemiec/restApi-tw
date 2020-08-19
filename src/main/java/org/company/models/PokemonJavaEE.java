@@ -1,33 +1,34 @@
 package org.company.models;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.company.enums.TypeEnum;
 
-public class Pokemon {
+import javax.persistence.*;
 
+
+@Entity(name = "Pokemon")
+@Getter
+@Setter
+@NoArgsConstructor
+public class PokemonJavaEE {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique = true, nullable = false)
+    private int pokedexNumber;
+
     private String name;
-    private TypeEnum type;
 
-    public Pokemon() {
-    }
+    @Enumerated
+    private TypeEnum typeEnum;
 
-    public Pokemon(String name, TypeEnum typeEnum) {
-        this.name = name;
-        this.type = typeEnum;
-    }
+    @OneToOne
+    private Stats stats;
 
-    public Pokemon(int id, String name, String type) {
-        this.id = id;
-        this.name = name;
-        this.type = decideTypeString(type);
-    }
-
-    public Pokemon(int id, String name, int typeInt) {
-        this.id = id;
-        this.name = name;
-        this.type = decideTypeInt(typeInt);
-        System.out.println("type enum = " + this.type);
-    }
 
     private TypeEnum decideTypeInt(int typeInt) {
         try {
@@ -50,38 +51,6 @@ public class Pokemon {
             e.printStackTrace();
             return TypeEnum.NONE;
         }
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public Pokemon setId(int id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Pokemon setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public TypeEnum getType() {
-        return type;
-    }
-
-    public String getTypeInString()
-    {
-        return type.toString();
-    }
-
-    public Pokemon setType(TypeEnum type) {
-        this.type = type;
-        return this;
     }
 
     public TypeEnum decideTypeString(String type) {
@@ -107,4 +76,5 @@ public class Pokemon {
             return TypeEnum.NONE;
         }
     }
+
 }

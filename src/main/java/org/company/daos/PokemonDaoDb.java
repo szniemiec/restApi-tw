@@ -1,6 +1,6 @@
 package org.company.daos;
 
-import org.company.database.PostgreSQLJDBC;
+import org.company.database.ConnectionFactory;
 import org.company.enums.TypeEnum;
 import org.company.exceptions.TypeIdException;
 import org.company.models.Pokemon;
@@ -12,14 +12,14 @@ import java.util.List;
 
 public class PokemonDaoDb implements PokemonDao {
 
-    private PostgreSQLJDBC database = null;
+    private ConnectionFactory database = null;
 
 //    public PokemonDao(PostgreSQLJDBC database, JSONService jsonService) {
 //        this.database = new PostgreSQLJDBC(jsonService);
 //    }
 
-    public PokemonDaoDb(PostgreSQLJDBC postgreSQLJDBC) {
-        this.database = postgreSQLJDBC;
+    public PokemonDaoDb(ConnectionFactory connectionFactory) {
+        this.database = connectionFactory;
     }
 
     public List<Pokemon> loadAll() {
@@ -38,6 +38,8 @@ public class PokemonDaoDb implements PokemonDao {
             return pokemons;
         } catch (SQLException | TypeIdException throwables) {
             throwables.printStackTrace();
+        } finally {
+            database.disconnect();
         }
         return new ArrayList<>();
     }
@@ -56,6 +58,8 @@ public class PokemonDaoDb implements PokemonDao {
             }
         } catch (SQLException | TypeIdException throwables) {
             throwables.printStackTrace();
+        } finally {
+            database.disconnect();
         }
         return new Pokemon();
     }
@@ -71,7 +75,6 @@ public class PokemonDaoDb implements PokemonDao {
         };
     }
 
-    @Override
     public Pokemon getById(int id) {
         Connection con = database.getConnection();
         Pokemon pokemon = null;
@@ -90,12 +93,13 @@ public class PokemonDaoDb implements PokemonDao {
             }
         } catch (Exception e) {
             System.err.println("Error! Reading pokemon by id from DB failed!");
+        }finally {
+            database.disconnect();
         }
         return pokemon;
     }
 
 
-    @Override
     public boolean create(Pokemon pokemon) {
         Connection con = database.getConnection();
         try {
@@ -107,6 +111,28 @@ public class PokemonDaoDb implements PokemonDao {
         } catch (Exception e) {
             System.err.println("Error! Adding to DB failed!");
             return false;
+        }finally {
+            database.disconnect();
         }
+    }
+
+    @Override
+    public Pokemon readById(int id) {
+            return null;
+    }
+
+    @Override
+    public boolean update(Pokemon pokemon) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(int id) {
+        return false;
+    }
+
+    @Override
+    public List<Pokemon> getAllElements() {
+        return null;
     }
 }
