@@ -26,7 +26,7 @@ public class Pokemon {
         this.id = id;
         this.name = name;
         this.type = decideTypeInt(typeInt);
-        System.out.println(this.type);
+        System.out.println("type enum = " + this.type);
     }
 
     private TypeEnum decideTypeInt(int typeInt) {

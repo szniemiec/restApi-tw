@@ -2,10 +2,7 @@ package org.company.daos;
 
 import org.company.models.Pokemon;
 
-public interface PokemonDao {
+public interface PokemonDao extends Dao<Pokemon> {
 
-    Pokemon getById(int id);
-
-    boolean create(Pokemon pokemon);
 
 }

@@ -11,7 +11,8 @@ public class PokemonHandler {
     }
 
     public Pokemon testGetByIdPokemon(int id) {
-        return this.pokemonService.getPokemonById(id);
+        return null;
+//        return this.pokemonService.getPokemonById(id);
     }
 
     public void testAddPokemon(Pokemon pokemon) {
