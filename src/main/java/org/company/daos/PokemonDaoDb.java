@@ -99,6 +99,7 @@ public class PokemonDaoDb implements PokemonDao {
         return pokemon;
     }
 
+
     public boolean create(Pokemon pokemon) {
         Connection con = database.getConnection();
         try {
