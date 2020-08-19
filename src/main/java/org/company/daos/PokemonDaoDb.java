@@ -94,18 +94,5 @@ public class PokemonDaoDb implements PokemonDao {
         return pokemon;
     }
 
-    @Override
-    public boolean create(Pokemon pokemon) {
-        Connection con = database.getConnection();
-        try {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO pokemons(name, type_id) VALUES (?, ?);");
-            ps.setString(1, pokemon.getName());
-            ps.setInt(2, pokemon.getType().getTypeId());
-            ps.executeUpdate();
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error! Adding to DB failed!");
-            return false;
-        }
-    }
-}
+
+ 
