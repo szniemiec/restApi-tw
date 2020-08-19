@@ -10,6 +10,9 @@ import org.company.models.PokemonJavaEE;
 import org.company.services.JSONService;
 import org.company.services.PokemonService;
 
+// Install Lombok plugin:
+//https://projectlombok.org/setup/intellij
+
 public class TestMain {
     public static void main(String[] args) {
         DaoFactory herokuDatabaseFactory = DaoFactory.getDaoFactory(DatabaseType.HEROKU);

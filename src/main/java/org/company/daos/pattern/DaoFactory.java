@@ -9,27 +9,14 @@ import static org.company.daos.pattern.DatabaseType.*;
 public abstract class DaoFactory {
 
     // List of DAO types supported by the factory // TODO: change to ENUMS
-//    public static final int HEROKU = 1;
-//    public static final int LOCAL = 2;
-//    public static final int ORACLE = 3;
+    public static final DatabaseType HEROKU = DatabaseType.HEROKU;
+    public static final DatabaseType LOCAL = DatabaseType.LOCAL;
+    public static final DatabaseType ORACLE = DatabaseType.ORACLE;
 
     // There will be a method for each DAO that can be
     // created. The concrete factories will have to
     // implement these methods.
     public abstract PokemonDao getPokemonDao();
-
-//    public static DaoFactory getDaoFactory(int whichFactory) {
-//        switch (whichFactory) {
-//            case HEROKU:
-//                return new HerokuDaoFactory();
-//            case LOCAL: // TODO
-////                return new LocalDaoFactory();
-//            case ORACLE: // TODO
-////                return new OracleDaoFactory();
-//            default:
-//                throw new NullPointerException();
-//        }
-//    }
 
     public static DaoFactory getDaoFactory(DatabaseType databaseType) {
         switch (databaseType) {
