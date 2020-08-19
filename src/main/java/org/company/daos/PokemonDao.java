@@ -6,7 +6,6 @@ public interface PokemonDao {
 
     Pokemon getById(int id);
 
-    Pokemon getAll(String[] args);
 
     boolean create(Pokemon pokemon);
 
