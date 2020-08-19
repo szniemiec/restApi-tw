@@ -12,13 +12,12 @@ import org.company.services.PokemonService;
 
 public class TestMain {
     public static void main(String[] args) {
-        DaoFactory herokuDatabaseFactory = DaoFactory.getDaoFactory(DaoFactory.HEROKU);
+        DaoFactory herokuDatabaseFactory = DaoFactory.getDaoFactory(DatabaseType.HEROKU);
         PokemonDao pokemonDao = herokuDatabaseFactory.getPokemonDao();
         Pokemon pokemon = pokemonDao.readById(5);
-        System.out.println(pokemon.getName());
+        System.out.println("Factory dao pokemon = " + pokemon.getName());
 
-        PokemonHandler pokemonHandler2 = new PokemonHandler(
-                new PokemonService(herokuDatabaseFactory.getPokemonDao()));
+        PokemonHandler pokemonHandler2 = new PokemonHandler(new PokemonService(herokuDatabaseFactory.getPokemonDao()));
 
 
         PokemonHandler pokemonHandler = new PokemonHandler(

@@ -12,9 +12,7 @@ public class Trainer {
     @OneToOne
     private SpecificInformation specificInformation;
 
-//    @OneToMany(mappedBy = "pokemon")
-    @ElementCollection
-    @CollectionTable(name = "pokemons")
+    @OneToMany(mappedBy = "pokemon")
     private List<Integer> pokemons; // list of pokemon Id's
 
 }

@@ -27,6 +27,8 @@ public class HerokuDaoFactory extends DaoFactory {
 
     public PokemonDao getPokemonDao() {
         return new HerokuPokemonDao(this);
+        // TODO: should be without parameters, but then it would require to use DataSource library
+        // return new HerokuPokemonDao();
     }
 
     public Connection connect() {
