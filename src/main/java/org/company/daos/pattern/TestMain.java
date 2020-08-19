@@ -6,6 +6,7 @@ import org.company.database.ConnectionFactory;
 import org.company.enums.TypeEnum;
 import org.company.handlers.PokemonHandler;
 import org.company.models.Pokemon;
+import org.company.models.PokemonJavaEE;
 import org.company.services.JSONService;
 import org.company.services.PokemonService;
 
@@ -31,6 +32,7 @@ public class TestMain {
         pokemonHandler.testAddPokemon(pikachu);
 
 
+        PokemonJavaEE pokemonJavaEE = new PokemonJavaEE();
 
     }
 }
