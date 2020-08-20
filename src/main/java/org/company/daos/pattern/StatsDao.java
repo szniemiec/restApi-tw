@@ -1,4 +1,7 @@
 package org.company.daos.pattern;
 
-public interface StatsDao {
+import org.company.daos.Dao;
+import org.company.models.used.Stats;
+
+public interface StatsDao extends Dao<Stats> {
 }

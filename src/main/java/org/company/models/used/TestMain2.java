@@ -14,7 +14,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestMain2 {
+    public static void main(String[] args) {
+        DaoFactory herokuDaoFactory = DaoFactory.getDaoFactory(DatabaseType.HEROKU);
+
+        StatsDao statsDao = herokuDaoFactory.getStatsDao();
+        StatsService statsService = new StatsService(statsDao);
+        Stats pikachuStats = new Stats(11, 22);
+        statsService.persist(pikachuStats);
+
+
+        PokemonDao pokemonDao = herokuDaoFactory.getPokemonDao();
+        PokemonService pokemonService = new PokemonService(pokemonDao);
+        Pokemon pikachu = new Pokemon(25, "Pikachu", TypeEnum.ELECTRIC, pikachuStats);
+        pokemonService.persist(pikachu);
+
+
+        TrainerDao trainerDao = herokuDaoFactory.getTrainerDao();
+        TrainerService trainerService = new TrainerService(trainerDao);
+        List<Pokemon> ashPokemons = new ArrayList<>();
+        ashPokemons.add(pikachu);
+        Trainer ashKetchum = new Trainer("Ash", "Ketchum", 3, 4231, "ash@ketchum.com", ashPokemons);
+        trainerService.persist(ashKetchum);
+    }
     public void fillDatabase() {
+
+
         DaoFactory herokuDaoFactory = DaoFactory.getDaoFactory(DatabaseType.HEROKU);
 
         StatsDao statsDao = herokuDaoFactory.getStatsDao();
@@ -51,7 +75,7 @@ public class TestMain2 {
         ashPokemons.add(pikachu);
         ashPokemons.add(charizard);
         ashPokemons.add(magikarp);
-        Trainer ashKetchum = new Trainer("Ash", "Ketchu", 3, 4231, "ash@ketchum.com", ashPokemons);
+        Trainer ashKetchum = new Trainer("Ash", "Ketchum", 3, 4231, "ash@ketchum.com", ashPokemons);
 //        trainerService.persist(ashKetchum);
 
 

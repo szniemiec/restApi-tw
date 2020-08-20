@@ -27,9 +27,9 @@ public abstract class SessionManager {
         return sessionFactory;
     }
 
-    public Session getCurrentSession() {
-        return this.currentSession;
-    }
+//    public Session getCurrentSession() {
+//        return this.currentSession;
+//    }
 
     public Transaction getCurrentTransaction() {
         return this.currentTransaction;
