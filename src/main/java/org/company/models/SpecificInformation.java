@@ -1,6 +1,7 @@
 package org.company.models;
 
-import javax.persistence.Column;
+import org.company.models.used.Trainer;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -10,12 +11,13 @@ public class SpecificInformation {
     @GeneratedValue
     private int id;
 
-    private int level;
-    private int experience;
-    private int age;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+//    private int level;
+//    private int experience;
+//    private int age;
+//
+//    @Column(unique = true, nullable = false)
+//    private String email;
 
     @OneToOne(mappedBy = "trainer")
     private Trainer trainer;

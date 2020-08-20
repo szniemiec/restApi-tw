@@ -1,5 +1,6 @@
-package org.company.models;
+package org.company.models.used;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Entity(name = "Pokemon")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 public class PokemonJavaEE {
 
@@ -29,8 +31,21 @@ public class PokemonJavaEE {
     @OneToOne
     private Stats stats;
 
+    public PokemonJavaEE(int pokedexNumber, String name, TypeEnum typeEnum, Stats stats) {
+        this.pokedexNumber = pokedexNumber;
+        this.name = name;
+        this.typeEnum = typeEnum;
+        this.stats = stats;
+    }
 
-    private TypeEnum decideTypeInt(int typeInt) {
+    public PokemonJavaEE(int pokedexNumber, String name, int typeId, Stats stats) {
+        this.pokedexNumber = pokedexNumber;
+        this.name = name;
+        this.typeEnum = decideTypeByInt(typeId);
+        this.stats = stats;
+    }
+
+    private TypeEnum decideTypeByInt(int typeInt) {
         try {
             switch (typeInt) {
                 case 1:
