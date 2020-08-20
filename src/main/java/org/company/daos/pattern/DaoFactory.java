@@ -1,9 +1,6 @@
 package org.company.daos.pattern;
 
 import org.company.daos.PokemonDao;
-import org.company.daos.pattern.HerokuDaoFactory;
-
-import static org.company.daos.pattern.DatabaseType.*;
 
 // Abstract class DAO Factory
 public abstract class DaoFactory {
@@ -17,6 +14,8 @@ public abstract class DaoFactory {
     // created. The concrete factories will have to
     // implement these methods.
     public abstract PokemonDao getPokemonDao();
+    public abstract StatsDao getStatsDao();
+    public abstract TrainerDao getTrainerDao();
 
     public static DaoFactory getDaoFactory(DatabaseType databaseType) {
         switch (databaseType) {

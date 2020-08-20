@@ -4,7 +4,7 @@ import org.company.daos.PokemonDaoDb;
 import org.company.database.ConnectionFactory;
 import org.company.enums.TypeEnum;
 import org.company.handlers.PokemonHandler;
-import org.company.models.Pokemon;
+import org.company.models.PokemonWithoutStats;
 import org.company.services.JSONService;
 import org.company.services.PokemonService;
 
@@ -17,10 +17,10 @@ public class App {
                                         new JSONService()))));
 
 
-        Pokemon pikachu = new Pokemon("Pikxxjhkgdxxxdddachu", TypeEnum.ELECTRIC);
+        PokemonWithoutStats pikachu = new PokemonWithoutStats("Pikxxjhkgdxxxdddachu", TypeEnum.ELECTRIC);
         pokemonHandler.testAddPokemon(pikachu);
 
-        Pokemon pokemonById = pokemonHandler.testGetByIdPokemon(3);
+        PokemonWithoutStats pokemonById = pokemonHandler.testGetByIdPokemon(3);
         System.out.println("pokemonById = " + pokemonById.getName());
     }
 

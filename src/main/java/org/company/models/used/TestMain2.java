@@ -1,13 +1,24 @@
 package org.company.models.used;
 
+import org.company.daos.PokemonDao;
+import org.company.daos.pattern.DaoFactory;
+import org.company.daos.pattern.DatabaseType;
+import org.company.daos.pattern.StatsDao;
+import org.company.daos.pattern.TrainerDao;
 import org.company.enums.TypeEnum;
+import org.company.services.PokemonService;
+import org.company.services.StatsService;
+import org.company.services.TrainerService;
 
-import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestMain2 {
     public void fillDatabase() {
+        DaoFactory herokuDaoFactory = DaoFactory.getDaoFactory(DatabaseType.HEROKU);
+
+        StatsDao statsDao = herokuDaoFactory.getStatsDao();
+        StatsService statsService = new StatsService(statsDao);
         Stats pikachuStats = new Stats(11, 22);
         Stats charizardStats = new Stats(220, 100);
         Stats mewtwoStats = new Stats(999, 999);
@@ -20,25 +31,35 @@ public class TestMain2 {
         statsService.persist(dragoniteStats);
 
 
+        PokemonDao pokemonDao = herokuDaoFactory.getPokemonDao();
+        PokemonService pokemonService = new PokemonService(pokemonDao);
+        Pokemon pikachu = new Pokemon(25, "Pikachu", TypeEnum.ELECTRIC, pikachuStats);
+        Pokemon charizard = new Pokemon(6, "Charizard", TypeEnum.DRAGON, charizardStats);
+        Pokemon mewtwo = new Pokemon(150, "Mewtwo", TypeEnum.POISON, mewtwoStats);
+        Pokemon magikarp = new Pokemon(129, "Magikarp", TypeEnum.WATER, magikarpStats);
+        Pokemon dragonite = new Pokemon(149, "Dragonite", TypeEnum.DRAGON, dragoniteStats);
+        pokemonService.persist(pikachu);
+        pokemonService.persist(charizard);
+        pokemonService.persist(mewtwo);
+        pokemonService.persist(magikarp);
+        pokemonService.persist(dragonite);
 
-        PokemonJavaEE pikachu = new PokemonJavaEE(25, "Pikachu", TypeEnum.ELECTRIC, pikachuStats);
-        PokemonJavaEE charizard = new PokemonJavaEE(6, "Charizard", TypeEnum.DRAGON, charizardStats);
-        PokemonJavaEE mewtwo = new PokemonJavaEE(150, "Mewtwo", TypeEnum.POISON, mewtwoStats);
-        PokemonJavaEE magikarp = new PokemonJavaEE(129, "Magikarp", TypeEnum.WATER, magikarpStats);
-        PokemonJavaEE dragonite = new PokemonJavaEE(149, "Dragonite", TypeEnum.DRAGON, dragoniteStats);
 
-
-
-        List<PokemonJavaEE> ashPokemons = new ArrayList<>();
+        TrainerDao trainerDao = herokuDaoFactory.getTrainerDao();
+        TrainerService trainerService = new TrainerService(trainerDao);
+        List<Pokemon> ashPokemons = new ArrayList<>();
         ashPokemons.add(pikachu);
         ashPokemons.add(charizard);
         ashPokemons.add(magikarp);
         Trainer ashKetchum = new Trainer("Ash", "Ketchu", 3, 4231, "ash@ketchum.com", ashPokemons);
+//        trainerService.persist(ashKetchum);
 
-        List<PokemonJavaEE> garyPokemons = new ArrayList<>();
+
+        List<Pokemon> garyPokemons = new ArrayList<>();
         garyPokemons.add(mewtwo);
         garyPokemons.add(dragonite);
         Trainer gary = new Trainer("Gary", "Asshole", 10, 84512, "gary@power.com", garyPokemons);
+//        trainerService.persist(gary);
 
 
 

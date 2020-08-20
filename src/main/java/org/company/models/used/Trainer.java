@@ -30,9 +30,9 @@ public class Trainer {
             fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST
     )
-    private List<PokemonJavaEE> pokemons;
+    private List<Pokemon> pokemons;
 
-    public Trainer(String firstname, String lastname, int level, int experience, String email, List<PokemonJavaEE> pokemons) {
+    public Trainer(String firstname, String lastname, int level, int experience, String email, List<Pokemon> pokemons) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.level = level;

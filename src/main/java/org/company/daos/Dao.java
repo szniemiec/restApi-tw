@@ -1,17 +1,40 @@
 package org.company.daos;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import java.util.List;
 
 public interface Dao<T> {
 
-    public boolean create(T t);
+    boolean create(T t);
 
-    public T readById(int id);
+    T readById(int id);
 
-    public boolean update(T t);
+    boolean update(T t);
 
-    public boolean delete(int id);
+    boolean delete(int id);
 
-    public List<T> getAllElements();
+    List<T> getAllElements();
+
+    void persist(T t);
+
+    Session openCurrentSession();
+
+    Session openSessionWithTransaction();
+
+    static SessionFactory getSessionFactory() {
+        Configuration configuration = new Configuration();
+        SessionFactory sessionFactory = configuration.configure().buildSessionFactory();
+        return sessionFactory;
+    }
+
+    Session getCurrentSession();
+
+    void closeCurrentSession();
+
+    void closeSessionWithTransaction();
+
 
 }

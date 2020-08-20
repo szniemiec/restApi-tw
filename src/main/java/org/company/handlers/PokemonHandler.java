@@ -1,6 +1,6 @@
 package org.company.handlers;
 
-import org.company.models.Pokemon;
+import org.company.models.PokemonWithoutStats;
 import org.company.services.PokemonService;
 
 public class PokemonHandler {
@@ -10,12 +10,12 @@ public class PokemonHandler {
         this.pokemonService = pokemonService;
     }
 
-    public Pokemon testGetByIdPokemon(int id) {
+    public PokemonWithoutStats testGetByIdPokemon(int id) {
         return null;
 //        return this.pokemonService.getPokemonById(id);
     }
 
-    public void testAddPokemon(Pokemon pokemon) {
+    public void testAddPokemon(PokemonWithoutStats pokemon) {
         this.pokemonService.addPokemon(pokemon);
     }
 }

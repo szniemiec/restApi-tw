@@ -3,7 +3,9 @@ package org.company.daos;
 import org.company.database.ConnectionFactory;
 import org.company.enums.TypeEnum;
 import org.company.exceptions.TypeIdException;
-import org.company.models.Pokemon;
+import org.company.models.PokemonWithoutStats;
+import org.company.models.used.Pokemon;
+import org.hibernate.Session;
 
 import java.io.Serializable;
 import java.sql.*;
@@ -22,15 +24,15 @@ public class PokemonDaoDb implements PokemonDao {
         this.database = connectionFactory;
     }
 
-    public List<Pokemon> loadAll() {
+    public List<PokemonWithoutStats> loadAll() {
         final String SELECT_SQL = "SELECT * FROM pokemons;";
         try {
 //            database = new PostgreSQLJDBC();
             Statement st = database.getConnection().createStatement();
             ResultSet rs = st.executeQuery(SELECT_SQL);
-            List<Pokemon> pokemons = new ArrayList<>();
+            List<PokemonWithoutStats> pokemons = new ArrayList<>();
             while (rs.next()) {
-                pokemons.add(new Pokemon().setId(rs.getInt("id"))
+                pokemons.add(new PokemonWithoutStats().setId(rs.getInt("id"))
                         .setName(rs.getString("name"))
                         .setType(typeIdToEnum(rs.getInt("type_id"))));
             }
@@ -44,7 +46,7 @@ public class PokemonDaoDb implements PokemonDao {
         return new ArrayList<>();
     }
 
-    public Pokemon get(Serializable id) {
+    public PokemonWithoutStats get(Serializable id) {
         final String SELECT_SQL = "SELECT * FROM pokemons WHERE id = " + id + ";";
         try {
 //            database = new PostgreSQLJDBC();
@@ -52,7 +54,7 @@ public class PokemonDaoDb implements PokemonDao {
             ResultSet rs = st.executeQuery(SELECT_SQL);
             if (rs.next()) {
                 database.disconnect();
-                return new Pokemon().setId(rs.getInt("id"))
+                return new PokemonWithoutStats().setId(rs.getInt("id"))
                         .setName(rs.getString("name"))
                         .setType(typeIdToEnum(rs.getInt("type_id")));
             }
@@ -61,7 +63,7 @@ public class PokemonDaoDb implements PokemonDao {
         } finally {
             database.disconnect();
         }
-        return new Pokemon();
+        return new PokemonWithoutStats();
     }
 
     private TypeEnum typeIdToEnum(int typeId) throws TypeIdException {
@@ -75,9 +77,9 @@ public class PokemonDaoDb implements PokemonDao {
         };
     }
 
-    public Pokemon getById(int id) {
+    public PokemonWithoutStats getById(int id) {
         Connection con = database.getConnection();
-        Pokemon pokemon = null;
+        PokemonWithoutStats pokemon = null;
         try {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemons WHERE id = ?");
             ps.setInt(1, id);
@@ -89,7 +91,7 @@ public class PokemonDaoDb implements PokemonDao {
                 System.out.println(pokemonName);
                 int pokemonType = rs.getInt("type_id");
                 System.out.println(pokemonType);
-                pokemon = new Pokemon(pokemonId, pokemonName, pokemonType);
+                pokemon = new PokemonWithoutStats(pokemonId, pokemonName, pokemonType);
             }
         } catch (Exception e) {
             System.err.println("Error! Reading pokemon by id from DB failed!");
@@ -100,7 +102,7 @@ public class PokemonDaoDb implements PokemonDao {
     }
 
 
-    public boolean create(Pokemon pokemon) {
+    public boolean create(PokemonWithoutStats pokemon) {
         Connection con = database.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("INSERT INTO pokemons(name, type_id) VALUES (?, ?);");
@@ -114,6 +116,11 @@ public class PokemonDaoDb implements PokemonDao {
         }finally {
             database.disconnect();
         }
+    }
+
+    @Override
+    public boolean create(Pokemon pokemon) {
+        return false;
     }
 
     @Override
@@ -134,5 +141,35 @@ public class PokemonDaoDb implements PokemonDao {
     @Override
     public List<Pokemon> getAllElements() {
         return null;
+    }
+
+    @Override
+    public void persist(Pokemon pokemon) {
+
+    }
+
+    @Override
+    public Session openCurrentSession() {
+        return null;
+    }
+
+    @Override
+    public Session openSessionWithTransaction() {
+        return null;
+    }
+
+    @Override
+    public Session getCurrentSession() {
+        return null;
+    }
+
+    @Override
+    public void closeCurrentSession() {
+
+    }
+
+    @Override
+    public void closeSessionWithTransaction() {
+
     }
 }

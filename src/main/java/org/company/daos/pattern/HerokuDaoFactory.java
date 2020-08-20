@@ -25,10 +25,21 @@ public class HerokuDaoFactory extends DaoFactory {
         System.out.println("credentials = " + credentials.toString());
     }
 
+//    @Override
     public PokemonDao getPokemonDao() {
         return new HerokuPokemonDao(this);
         // TODO: should be without parameters, but then it would require to use DataSource library
         // return new HerokuPokemonDao();
+    }
+
+//    @Override
+    public StatsDao getStatsDao() {
+        return new HerokuStatsDao(this);
+    }
+
+//    @Override
+    public TrainerDao getTrainerDao() {
+        return new HerokuTrainerDao(this);
     }
 
     public Connection connect() {

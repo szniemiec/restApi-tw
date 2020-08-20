@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @Builder
 @NoArgsConstructor
-public class PokemonJavaEE {
+public class Pokemon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,14 +31,14 @@ public class PokemonJavaEE {
     @OneToOne
     private Stats stats;
 
-    public PokemonJavaEE(int pokedexNumber, String name, TypeEnum typeEnum, Stats stats) {
+    public Pokemon(int pokedexNumber, String name, TypeEnum typeEnum, Stats stats) {
         this.pokedexNumber = pokedexNumber;
         this.name = name;
         this.typeEnum = typeEnum;
         this.stats = stats;
     }
 
-    public PokemonJavaEE(int pokedexNumber, String name, int typeId, Stats stats) {
+    public Pokemon(int pokedexNumber, String name, int typeId, Stats stats) {
         this.pokedexNumber = pokedexNumber;
         this.name = name;
         this.typeEnum = decideTypeByInt(typeId);

@@ -5,8 +5,8 @@ import org.company.daos.PokemonDaoDb;
 import org.company.database.ConnectionFactory;
 import org.company.enums.TypeEnum;
 import org.company.handlers.PokemonHandler;
-import org.company.models.Pokemon;
-import org.company.models.used.PokemonJavaEE;
+import org.company.models.PokemonWithoutStats;
+import org.company.models.used.Pokemon;
 import org.company.services.JSONService;
 import org.company.services.PokemonService;
 
@@ -17,8 +17,9 @@ public class TestMain {
     public static void main(String[] args) {
         DaoFactory herokuDatabaseFactory = DaoFactory.getDaoFactory(DatabaseType.HEROKU);
         PokemonDao pokemonDao = herokuDatabaseFactory.getPokemonDao();
-        Pokemon pokemon = pokemonDao.readById(5);
-        System.out.println("Factory dao pokemon = " + pokemon.getName());
+
+        //        Pokemon pokemon = pokemonDao.readById(5);
+//        System.out.println("Factory dao pokemon = " + pokemon.getName());
 
         PokemonHandler pokemonHandler2 = new PokemonHandler(new PokemonService(herokuDatabaseFactory.getPokemonDao()));
 
@@ -30,11 +31,11 @@ public class TestMain {
                                         new JSONService()))));
 
 
-        Pokemon pikachu = new Pokemon("Pikxxjhkgdxxxdddachu", TypeEnum.ELECTRIC);
+        PokemonWithoutStats pikachu = new PokemonWithoutStats("Pikxxjhkgdxxxdddachu", TypeEnum.ELECTRIC);
         pokemonHandler.testAddPokemon(pikachu);
 
 
-        PokemonJavaEE pokemonJavaEE = new PokemonJavaEE();
+        Pokemon pokemon = new Pokemon();
 
     }
 }

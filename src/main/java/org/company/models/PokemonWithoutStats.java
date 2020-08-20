@@ -2,27 +2,27 @@ package org.company.models;
 
 import org.company.enums.TypeEnum;
 
-public class Pokemon {
+public class PokemonWithoutStats {
 
     private int id;
     private String name;
     private TypeEnum type;
 
-    public Pokemon() {
+    public PokemonWithoutStats() {
     }
 
-    public Pokemon(String name, TypeEnum typeEnum) {
+    public PokemonWithoutStats(String name, TypeEnum typeEnum) {
         this.name = name;
         this.type = typeEnum;
     }
 
-    public Pokemon(int id, String name, String type) {
+    public PokemonWithoutStats(int id, String name, String type) {
         this.id = id;
         this.name = name;
         this.type = decideTypeString(type);
     }
 
-    public Pokemon(int id, String name, int typeInt) {
+    public PokemonWithoutStats(int id, String name, int typeInt) {
         this.id = id;
         this.name = name;
         this.type = decideTypeInt(typeInt);
@@ -56,7 +56,7 @@ public class Pokemon {
         return id;
     }
 
-    public Pokemon setId(int id) {
+    public PokemonWithoutStats setId(int id) {
         this.id = id;
         return this;
     }
@@ -65,7 +65,7 @@ public class Pokemon {
         return name;
     }
 
-    public Pokemon setName(String name) {
+    public PokemonWithoutStats setName(String name) {
         this.name = name;
         return this;
     }
@@ -79,7 +79,7 @@ public class Pokemon {
         return type.toString();
     }
 
-    public Pokemon setType(TypeEnum type) {
+    public PokemonWithoutStats setType(TypeEnum type) {
         this.type = type;
         return this;
     }
