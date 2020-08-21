@@ -27,8 +27,6 @@ public class ApplicationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setStatus(200);
-        System.out.println("req uri = " + req.getRequestURI());
-        System.out.println("req servlet path = " + req.getServletPath());
 
         Map<String, String> uriAsMap = mapUriString(req.getRequestURI());
         String response = "";
@@ -38,7 +36,6 @@ public class ApplicationServlet extends HttpServlet {
             throwables.printStackTrace();
         }
 
-        System.out.println("response = " + response);
         resp.getWriter().write(response);
         resp.getWriter().println("Heelo");
     }
