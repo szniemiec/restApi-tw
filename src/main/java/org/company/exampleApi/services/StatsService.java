@@ -23,6 +23,11 @@ public class StatsService {
     }
 
     public void addStats(Stats stats) {
+
+
+
+
+
         this.statsDao.create(stats);
     }
 

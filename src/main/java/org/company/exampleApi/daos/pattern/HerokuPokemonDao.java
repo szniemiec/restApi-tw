@@ -64,6 +64,18 @@ public class HerokuPokemonDao implements PokemonDao {
 
     @Override
     public boolean delete(int id) {
+        StatsDao statsDao = herokuDaoFactory.getStatsDao();
+        statsDao.delete(id);
+
+
+
+
+
+
+
+
+
+
         return false;
     }
 

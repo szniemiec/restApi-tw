@@ -1,6 +1,7 @@
 package org.company.exampleApi.servlets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.SneakyThrows;
 import org.company.exampleApi.services.PokemonService;
 import org.company.exampleApi.services.StatsService;
 import org.company.exampleApi.services.TrainerService;
@@ -55,8 +56,34 @@ public class ApplicationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+    protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+        String uri = httpServletRequest.getRequestURI();
+        Map<String, String> uriMap = mapUriString(uri);
+        String response = addNewRecord(uriMap, httpServletRequest);
+
+        System.out.println(response);
+        httpServletResponse.getWriter().write(response);
+    }
+
+    private String addNewRecord(Map<String, String> uriMap, HttpServletRequest httpServletRequest) {
+        String serviceType = uriMap.get("typeOfService");
+        switch (serviceType) {
+            case "pokemons":
+                System.out.println("we are in case pokemons");
+                return pokemonService.addPokemonByRequest(httpServletRequest);
+            case "trainers":
+                System.out.println("we are in case trainers");
+                // TODO:
+//                return trainerService.addTrainerByRequest(httpServletRequest);
+            case "stats":
+                // TODO:
+                System.out.println("we are in case stats");
+//                return statsService.addStatsByRequest(httpServletRequest);
+            default:
+                return "Invalid input";
+        }
+
+
     }
 
     @Override
@@ -64,9 +91,35 @@ public class ApplicationServlet extends HttpServlet {
         super.doPut(req, resp);
     }
 
+    @SneakyThrows
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doDelete(req, resp);
+    protected void doDelete(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+        String uri = httpServletRequest.getRequestURI();
+        Map<String, String> uriMap = mapUriString(uri);
+        String response = deleteRecord(uriMap, httpServletRequest);
+
+        System.out.println(response);
+        httpServletResponse.getWriter().write(response);
+    }
+
+    private String deleteRecord(Map<String, String> uriMap, HttpServletRequest httpServletRequest) throws SQLException {
+        String serviceType = uriMap.get("typeOfService");
+        switch (serviceType) {
+            case "pokemons":
+                System.out.println("we are in case pokemons");
+                return pokemonService.deletePokemonByRequest(httpServletRequest);
+            case "trainers":
+                System.out.println("we are in case trainers");
+                // TODO:
+//                return trainerService.deleteTrainerByRequest(httpServletRequest);
+            case "stats":
+                // TODO:
+                System.out.println("we are in case stats");
+//                return statsService.deleteStatsByRequest(httpServletRequest);
+            default:
+                return "Invalid input";
+        }
+
     }
 
     private Map<String, String> mapUriString(String uri) {
@@ -82,7 +135,7 @@ public class ApplicationServlet extends HttpServlet {
         int elementIdIndex = 1; // NOT ALWAYS REQUIRED!
 
         Map<String, String> uriMap = new HashMap<>();
-        uriMap.put("elementType", uriList.get(serviceTypeIndex));
+        uriMap.put("typeOfService", uriList.get(serviceTypeIndex));
 
         if (uriList.size() == 2) {
             uriMap.put("id", uriList.get(elementIdIndex));
@@ -93,8 +146,8 @@ public class ApplicationServlet extends HttpServlet {
     }
 
     private String getEntityString(Map<String, String> uriMap) throws JsonProcessingException, SQLException {
-        String elementTypeString = uriMap.get("typeOfService");
-        switch (elementTypeString) {
+        String serviceType = uriMap.get("typeOfService");
+        switch (serviceType) {
             case "pokemons":
                 System.out.println("we are in case pokemons");
                 return pokemonService.getPokemonAsJson(uriMap);
