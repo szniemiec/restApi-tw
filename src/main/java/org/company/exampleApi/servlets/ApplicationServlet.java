@@ -149,12 +149,17 @@ public class ApplicationServlet extends HttpServlet {
 
         int serviceTypeIndex = 0;
         int elementIdIndex = 1; // NOT ALWAYS REQUIRED!
+        int myPokemonsIndex = 2;
 
         Map<String, String> uriMap = new HashMap<>();
         uriMap.put("typeOfService", uriList.get(serviceTypeIndex));
 
+        if (uriList.size() == 3) {
+            uriMap.put("myPokemons", uriList.get(2));
+        }
         if (uriList.size() == 2) {
             uriMap.put("id", uriList.get(elementIdIndex));
+
         }
 
         System.out.println(uriMap);

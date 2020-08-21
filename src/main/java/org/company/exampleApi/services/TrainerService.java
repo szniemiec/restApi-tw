@@ -47,6 +47,12 @@ public class TrainerService {
     public String getTrainerAsJson(Map<String, String> mapOfUri) throws SQLException, JsonProcessingException {
         JSONService jsonService = new JSONService();
 
+        // Returns Trainers pokemons
+        if(mapOfUri.containsKey("myPokemons")) {
+            Trainer trainer = getTrainerById(Integer.parseInt(mapOfUri.get("id")));
+            return jsonService.convertObjectToJson(trainer.getPokemons());
+        }
+        // Returns Trainer
         if (mapOfUri.containsKey("id")) {
             Trainer trainer = getTrainerById(Integer.parseInt(mapOfUri.get("id")));
             return jsonService.convertObjectToJson(trainer);
