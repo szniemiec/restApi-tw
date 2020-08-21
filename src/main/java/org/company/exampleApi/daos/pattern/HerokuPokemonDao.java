@@ -10,20 +10,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HerokuPokemonDao implements PokemonDao {
-//    private final ConnectionFactory connectionFactory;
     private final HerokuDaoFactory herokuDaoFactory;
 
     public HerokuPokemonDao(HerokuDaoFactory herokuDaoFactory) {
-//        this.connectionFactory = new ConnectionFactory();
         this.herokuDaoFactory = herokuDaoFactory;
     }
 
     @Override
     public Pokemon readById(int id) throws SQLException {
-//        Connection con = connectionFactory.connect();
         Connection con = herokuDaoFactory.connect();
         Pokemon pokemon = new Pokemon();
         try {
@@ -43,7 +41,7 @@ public class HerokuPokemonDao implements PokemonDao {
 //                int statsId = rs.getInt("stats_id");
 
                 StatsDao statsDao = this.herokuDaoFactory.getStatsDao();
-//                HerokuStatsDao statsDao = new HerokuStatsDao(this.herokuDaoFactory);
+
                 Stats stats = statsDao.readById(pokemonId);
                 System.out.println("stats = " + stats.toString());
 
@@ -67,21 +65,54 @@ public class HerokuPokemonDao implements PokemonDao {
         StatsDao statsDao = herokuDaoFactory.getStatsDao();
         statsDao.delete(id);
 
-
-
-
-
-
-
-
-
-
-        return false;
+        Connection con = herokuDaoFactory.connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM pokemon WHERE id = ?;");
+            ps.setInt(1, 2);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error! Deleting from db failed!");
+            return false;
+        } finally {
+            herokuDaoFactory.disconnect();
+        }
     }
 
     @Override
-    public List<Pokemon> getAllElements() {
-        return null;
+    public List<Pokemon> getAllElements() throws SQLException {
+        Connection con = herokuDaoFactory.connect();
+        Pokemon pokemon;
+        List<Pokemon> pokemons = new ArrayList<>();
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemon;");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int pokemonId = rs.getInt("id");
+                System.out.println("id = " + pokemonId);
+                String pokemonName = rs.getString("name");
+                System.out.println("name = " + pokemonName);
+                int pokedexNumber = rs.getInt("pokedexnumber");
+                System.out.println("pokedexNumber = " + pokedexNumber);
+                TypeEnum typeEnum = decideTypeByInt(rs.getInt("typeenum"));
+                System.out.println("type = " + typeEnum);
+
+//                int statsId = rs.getInt("stats_id");
+
+                StatsDao statsDao = this.herokuDaoFactory.getStatsDao();
+
+                Stats stats = statsDao.readById(pokemonId);
+                System.out.println("stats = " + stats.toString());
+
+                pokemon = new Pokemon(pokemonId, pokedexNumber, pokemonName, typeEnum, stats);
+                pokemons.add(pokemon);
+            }
+        } catch (Exception e) {
+            System.err.println("Error! Reading all pokemons from DB failed!");
+        } finally {
+            con.close();
+        }
+        return pokemons;
     }
 
 

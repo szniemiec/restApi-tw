@@ -29,7 +29,18 @@ public class HerokuStatsDao  implements StatsDao {
 
     @Override
     public boolean delete(int id) {
-        return false;
+        Connection con = herokuDaoFactory.connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM stats WHERE id = ?;");
+            ps.setInt(1, 2);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error! Deleting from db failed!");
+            return false;
+        } finally {
+            herokuDaoFactory.disconnect();
+        }
     }
 
     @Override

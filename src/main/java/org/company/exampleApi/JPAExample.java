@@ -131,3 +131,7 @@ public class JPAExample {
         em.clear();
     }
 }
+
+
+// TODO:
+//    - pokemon_id in stats tabel should appear!

@@ -13,5 +13,5 @@ public interface Dao<T> {
 
     boolean delete(int id);
 
-    List<T> getAllElements();
+    List<T> getAllElements() throws SQLException;
 }

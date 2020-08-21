@@ -118,7 +118,7 @@ public class PokemonService {
                     return TypeEnum.WATER;
                 case "GRASS":
                     return TypeEnum.GRASS;
-                case "ELECTRIC":g
+                case "ELECTRIC":
                     return TypeEnum.ELECTRIC;
                 case "POISON":
                     return TypeEnum.POISON;

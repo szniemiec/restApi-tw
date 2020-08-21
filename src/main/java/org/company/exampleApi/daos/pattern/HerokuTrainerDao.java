@@ -2,6 +2,7 @@ package org.company.exampleApi.daos.pattern;
 
 
 import org.company.exampleApi.daos.PokemonDao;
+import org.company.exampleApi.daos.StatsDao;
 import org.company.exampleApi.daos.TrainerDao;
 import org.company.exampleApi.models.Pokemon;
 import org.company.exampleApi.models.Trainer;
@@ -14,11 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HerokuTrainerDao implements TrainerDao {
-//    private final ConnectionFactory connectionFactory;
     private final HerokuDaoFactory herokuDaoFactory;
 
     public HerokuTrainerDao(HerokuDaoFactory herokuDaoFactory) {
-//        this.connectionFactory = new ConnectionFactory();
         this.herokuDaoFactory = herokuDaoFactory;
     }
 
@@ -35,18 +34,60 @@ public class HerokuTrainerDao implements TrainerDao {
 
     @Override
     public boolean delete(int id) {
-        return false;
+        Connection con = herokuDaoFactory.connect();
+
+        try {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM trainer WHERE id = ?;");
+            // TODO: should also delete from other tables???
+            ps.setInt(1, 2);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error! Deleting from db failed!");
+            return false;
+        } finally {
+            herokuDaoFactory.disconnect();
+        }
     }
 
     @Override
-    public List<Trainer> getAllElements() {
-        return null;
+    public List<Trainer> getAllElements() throws SQLException {
+        Connection con = herokuDaoFactory.connect();
+        Trainer trainer = new Trainer();
+        List<Trainer> trainers = new ArrayList<>();
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM trainer;");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int trainerId = rs.getInt("id");
+                String email = rs.getString("email");
+                String firstname = rs.getString("firstname");
+                String lastname = rs.getString("lastname");
+                int experience = rs.getInt("experience");
+                int level = rs.getInt("level");
+
+                List<Pokemon> pokemonsList = getTrainersPokemonByTrainerId(trainerId);
+                trainer
+                        .setId(trainerId)
+                        .setFirstname(firstname)
+                        .setLastname(lastname)
+                        .setEmail(email)
+                        .setExperience(experience)
+                        .setLevel(level)
+                        .setPokemons(pokemonsList);
+                trainers.add(trainer);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return trainers;
     }
 
 
     @Override
     public Trainer readById(int id) throws SQLException {
-//        Connection con = connectionFactory.connect();
         Connection con = herokuDaoFactory.connect();
         Trainer trainer = new Trainer();
         try {
@@ -61,8 +102,6 @@ public class HerokuTrainerDao implements TrainerDao {
                 int experience = rs.getInt("experience");
                 int level = rs.getInt("level");
 
-//                TrainerPokemonDao trainerPokemonDao = new TrainerPokemonDao();
-//                List<Pokemon> pokemonsList = trainerPokemonDao.getTrainersPokemonByTrainerId(trainerId);
                 List<Pokemon> pokemonsList = getTrainersPokemonByTrainerId(trainerId);
                 trainer
                         .setId(trainerId)
