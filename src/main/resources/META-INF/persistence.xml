@@ -6,9 +6,9 @@
 
     <persistence-unit name="jpaexamplePU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>org.company.models.Stats</class>
-        <class>org.company.models.used.Pokemon</class>
-        <class>org.company.models.Trainer</class>
+        <class>org.company.exampleApi.models.Stats</class>
+        <class>org.company.exampleApi.models.Pokemon</class>
+        <class>org.company.exampleApi.models.Trainer</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL94Dialect"/>
@@ -28,7 +28,6 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/thepokemonsdb"/>
             <property name="javax.persistence.jdbc.user" value="postgres"/>
             <property name="javax.persistence.jdbc.password" value="admin"/>
-            <!--<property name="javax.persistence.sql-load-script-source" value="insert.sql"/>-->
         </properties>
     </persistence-unit>
 
