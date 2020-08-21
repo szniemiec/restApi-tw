@@ -62,7 +62,7 @@ public class ApplicationServlet extends HttpServlet {
             case "trainers":
                 System.out.println("we are in case trainers");
                 // TODO:
-//                return trainerService.addTrainerByRequest(httpServletRequest);
+                return trainerService.addTrainerByRequest(httpServletRequest);
             case "stats":
                 // TODO:
                 System.out.println("we are in case stats");
@@ -128,9 +128,9 @@ public class ApplicationServlet extends HttpServlet {
             case "trainers":
                 System.out.println("we are in case trainers");
                 // TODO:
-//                return trainerService.deleteTrainerByRequest(httpServletRequest);
+                return trainerService.deleteTrainerByRequest(httpServletRequest);
             case "stats":
-                // TODO:
+                // TODO: REDUNDANT, should be deleted together with pokemon
                 System.out.println("we are in case stats");
 //                return statsService.deleteStatsByRequest(httpServletRequest);
             default:
