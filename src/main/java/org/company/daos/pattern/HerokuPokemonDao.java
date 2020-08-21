@@ -1,49 +1,59 @@
 package org.company.daos.pattern;
 
 import org.company.daos.PokemonDao;
-import org.company.models.PokemonWithoutStats;
+import org.company.database.ConnectionFactory;
+import org.company.enums.TypeEnum;
 import org.company.models.used.Pokemon;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
+import org.company.models.used.Stats;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-public class HerokuPokemonDao extends SessionManager implements PokemonDao   {
+public class HerokuPokemonDao implements PokemonDao {
+//    private final ConnectionFactory connectionFactory;
     private final HerokuDaoFactory herokuDaoFactory;
-    private Session currentSession;
-    private Transaction currentTransaction;
 
     public HerokuPokemonDao(HerokuDaoFactory herokuDaoFactory) {
+//        this.connectionFactory = new ConnectionFactory();
         this.herokuDaoFactory = herokuDaoFactory;
     }
 
     @Override
-    public Pokemon readById(int id) {
+    public Pokemon readById(int id) throws SQLException {
+//        Connection con = connectionFactory.connect();
         Connection con = herokuDaoFactory.connect();
-        Pokemon pokemon = null;
-//        try {
-//            PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemons WHERE id = ?");
-//            ps.setInt(1, id);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                int pokemonId = rs.getInt("id");
-//                System.out.println("id = " + pokemonId);
-//                String pokemonName = rs.getString("name");
-//                System.out.println("name = " + pokemonName);
-//                int pokemonType = rs.getInt("type_id");
-//                System.out.println("type id = " + pokemonType);
-//                pokemon = new PokemonWithoutStats(pokemonId, pokemonName, pokemonType);
-//            }
-//        } catch (Exception e) {
-//            System.err.println("Error! Reading pokemon by id from DB failed!");
-//        }finally {
-//            herokuDaoFactory.disconnect();
-//        }
+        Pokemon pokemon = new Pokemon();
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM pokemon WHERE id = ?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int pokemonId = rs.getInt("id");
+                System.out.println("id = " + pokemonId);
+                String pokemonName = rs.getString("name");
+                System.out.println("name = " + pokemonName);
+                int pokedexNumber = rs.getInt("pokedexnumber");
+                System.out.println("pokedexNumber = " + pokedexNumber);
+                TypeEnum typeEnum = decideTypeByInt(rs.getInt("typeenum"));
+                System.out.println("type = " + typeEnum);
+
+//                int statsId = rs.getInt("stats_id");
+
+                StatsDao statsDao = this.herokuDaoFactory.getStatsDao();
+//                HerokuStatsDao statsDao = new HerokuStatsDao(this.herokuDaoFactory);
+                Stats stats = statsDao.readById(pokemonId);
+                System.out.println("stats = " + stats.toString());
+
+                pokemon = new Pokemon(pokemonId, pokedexNumber, pokemonName, typeEnum, stats);
+            }
+        } catch (Exception e) {
+            System.err.println("Error! Reading stats by id from DB failed!");
+        } finally {
+            con.close();
+        }
         return pokemon;
     }
 
@@ -63,7 +73,6 @@ public class HerokuPokemonDao extends SessionManager implements PokemonDao   {
     }
 
 
-
     @Override
     public boolean create(Pokemon pokemon) {
         Connection con = herokuDaoFactory.connect();
@@ -76,47 +85,32 @@ public class HerokuPokemonDao extends SessionManager implements PokemonDao   {
         } catch (Exception e) {
             System.err.println("Error! Adding to DB failed!");
             return false;
-        }finally {
+        } finally {
             herokuDaoFactory.disconnect();
         }
     }
 
-    public void persist(Pokemon pokemon) {
-        getCurrentSession().save(pokemon);
+    private TypeEnum decideTypeByInt(int typeInt) {
+        try {
+            switch (typeInt) {
+                case 0:
+                    return TypeEnum.DRAGON;
+                case 1:
+                    return TypeEnum.WATER;
+                case 2:
+                    return TypeEnum.GRASS;
+                case 3:
+                    return TypeEnum.ELECTRIC;
+                case 4:
+                    return TypeEnum.POISON;
+                default:
+                    return TypeEnum.NONE;
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid Pokemon Type! Type will be set to NONE with typeId 6");
+            e.printStackTrace();
+            return TypeEnum.NONE;
+        }
     }
 
-    @Override
-    public Session openCurrentSession() {
-        this.currentSession = getSessionFactory().openSession();
-        return this.currentSession;
-    }
-
-    @Override
-    public Session openSessionWithTransaction() {
-        this.currentSession = getSessionFactory().openSession();
-        this.currentTransaction = currentSession.beginTransaction();
-        return currentSession;
-    }
-
-    private static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration();
-        SessionFactory sessionFactory = configuration.configure().buildSessionFactory();
-        return sessionFactory;
-    }
-
-    @Override
-    public Session getCurrentSession() {
-        return this.currentSession;
-    }
-
-    @Override
-    public void closeCurrentSession() {
-        this.currentSession.close();
-    }
-
-    @Override
-    public void closeSessionWithTransaction() {
-        this.currentTransaction.commit();
-        this.currentSession.close();
-    }
 }

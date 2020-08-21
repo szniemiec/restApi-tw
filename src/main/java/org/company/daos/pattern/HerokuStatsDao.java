@@ -1,19 +1,25 @@
 package org.company.daos.pattern;
 
+import org.company.database.ConnectionFactory;
 import org.company.models.used.Stats;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.OneToOne;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-public class HerokuStatsDao extends SessionManager implements StatsDao {
+public class HerokuStatsDao  implements StatsDao {
+//    private final ConnectionFactory connectionFactory;
     private final HerokuDaoFactory herokuDaoFactory;
-    private Session currentSession;
-    private Transaction currentTransaction;
 
     public HerokuStatsDao(HerokuDaoFactory herokuDaoFactory) {
+//        this.connectionFactory = new ConnectionFactory();
         this.herokuDaoFactory = herokuDaoFactory;
     }
 
@@ -22,10 +28,6 @@ public class HerokuStatsDao extends SessionManager implements StatsDao {
         return false;
     }
 
-    @Override
-    public Stats readById(int id) {
-        return null;
-    }
 
     @Override
     public boolean update(Stats stats) {
@@ -43,42 +45,30 @@ public class HerokuStatsDao extends SessionManager implements StatsDao {
     }
 
     @Override
-    public void persist(Stats stats) {
-
-    }
-
-    @Override
-    public Session openCurrentSession() {
-        this.currentSession = getSessionFactory().openSession();
-        return this.currentSession;
-    }
-
-    @Override
-    public Session openSessionWithTransaction() {
-        this.currentSession = getSessionFactory().openSession();
-        this.currentTransaction = currentSession.beginTransaction();
-        return currentSession;
-    }
-
-    private static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration();
-        SessionFactory sessionFactory = configuration.configure().buildSessionFactory();
-        return sessionFactory;
-    }
-
-    @Override
-    public Session getCurrentSession() {
-        return this.currentSession;
-    }
-
-    @Override
-    public void closeCurrentSession() {
-        this.currentSession.close();
-    }
-
-    @Override
-    public void closeSessionWithTransaction() {
-        this.currentTransaction.commit();
-        this.currentSession.close();
+    public Stats readById(int id) throws SQLException {
+        System.out.println("stats by id");
+//        Connection con = connectionFactory.connect();
+        Connection con = herokuDaoFactory.connect();
+        Stats stats = new Stats();
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM stats WHERE id = ?;");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int statsId = rs.getInt("id");
+                int damage = rs.getInt("damage");
+                int defense = rs.getInt("defense");
+                System.out.format("id = %d, damage = %d, defense = %d",
+                        statsId,
+                        damage,
+                        defense);
+                stats.setId(statsId).setDamage(damage).setDefense(defense);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return stats;
     }
 }

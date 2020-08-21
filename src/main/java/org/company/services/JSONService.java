@@ -13,7 +13,7 @@ public class JSONService {
 
         try {
             Gson gson = new Gson();
-            BufferedReader reader = Files.newBufferedReader(Paths.get("src/main/resources/environmentSpecs/environment.json"));
+            BufferedReader reader = Files.newBufferedReader(Paths.get("src/main/resources/environmentSpecs/localEnvironment.json"));
             DbCredentials credentials = gson.fromJson(reader, DbCredentials.class);
             reader.close();
             return credentials;

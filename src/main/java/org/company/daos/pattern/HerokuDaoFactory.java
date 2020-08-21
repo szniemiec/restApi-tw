@@ -42,6 +42,7 @@ public class HerokuDaoFactory extends DaoFactory {
         return new HerokuTrainerDao(this);
     }
 
+
     public Connection connect() {
         try {
             Class.forName(this.jdbcDriver);

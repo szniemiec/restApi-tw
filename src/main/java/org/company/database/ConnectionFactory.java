@@ -14,13 +14,6 @@ public class ConnectionFactory implements Connectable {
     private final String userPassword;
     private final String databaseUrl;
 
-//    public PostgreSQLJDBC() {
-//        JSONService jsonService = new JSONService();
-//        credentials = jsonService.readEnvironment();
-//        System.out.println("credentials = " + credentials.toString());
-////        this.c = connect(credentials);
-//    }
-
     public ConnectionFactory() {
         DbCredentials credentials = new JSONService().readEnvironment();
         this.databaseUrl = credentials.getDatabaseUrl();
@@ -47,8 +40,7 @@ public class ConnectionFactory implements Connectable {
         try {
             Class.forName(this.jdbcDriver);
             this.c = DriverManager.getConnection(this.databaseUrl, this.userLogin, this.userPassword);
-
-//            this.c = DriverManager.getConnection("jdbc:postgresql://" + HOST + ":" + PORT + "/" + DATABASE, LOGIN, PASSWORD);
+//            this.c = DriverManager.getConnection(this.databaseUrl, this.userLogin, this.userPassword);
         } catch (SQLException e) {
             System.out.println("Error! Cannot connect with the database.");
             e.printStackTrace();

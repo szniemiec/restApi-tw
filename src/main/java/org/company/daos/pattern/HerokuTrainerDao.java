@@ -1,20 +1,23 @@
 package org.company.daos.pattern;
 
 
+import org.company.daos.PokemonDao;
+import org.company.models.used.Pokemon;
 import org.company.models.used.Trainer;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class HerokuTrainerDao extends SessionManager implements TrainerDao {
-    private HerokuDaoFactory herokuDaoFactory;
-    private Session currentSession;
-    private Transaction currentTransaction;
+public class HerokuTrainerDao implements TrainerDao {
+//    private final ConnectionFactory connectionFactory;
+    private final HerokuDaoFactory herokuDaoFactory;
 
     public HerokuTrainerDao(HerokuDaoFactory herokuDaoFactory) {
+//        this.connectionFactory = new ConnectionFactory();
         this.herokuDaoFactory = herokuDaoFactory;
     }
 
@@ -23,10 +26,6 @@ public class HerokuTrainerDao extends SessionManager implements TrainerDao {
         return false;
     }
 
-    @Override
-    public Trainer readById(int id) {
-        return null;
-    }
 
     @Override
     public boolean update(Trainer trainer) {
@@ -43,43 +42,68 @@ public class HerokuTrainerDao extends SessionManager implements TrainerDao {
         return null;
     }
 
+
     @Override
-    public void persist(Trainer trainer) {
-        getCurrentSession().save(trainer);
+    public Trainer readById(int id) throws SQLException {
+//        Connection con = connectionFactory.connect();
+        Connection con = herokuDaoFactory.connect();
+        Trainer trainer = new Trainer();
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM trainer WHERE id = ?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int trainerId = rs.getInt("id");
+                String email = rs.getString("email");
+                String firstname = rs.getString("firstname");
+                String lastname = rs.getString("lastname");
+                int experience = rs.getInt("experience");
+                int level = rs.getInt("level");
+
+//                TrainerPokemonDao trainerPokemonDao = new TrainerPokemonDao();
+//                List<Pokemon> pokemonsList = trainerPokemonDao.getTrainersPokemonByTrainerId(trainerId);
+                List<Pokemon> pokemonsList = getTrainersPokemonByTrainerId(trainerId);
+                trainer
+                        .setId(trainerId)
+                        .setFirstname(firstname)
+                        .setLastname(lastname)
+                        .setEmail(email)
+                        .setExperience(experience)
+                        .setLevel(level)
+                        .setPokemons(pokemonsList);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return trainer;
     }
 
     @Override
-    public Session openCurrentSession() {
-        this.currentSession = getSessionFactory().openSession();
-        return this.currentSession;
-    }
+    public List<Pokemon> getTrainersPokemonByTrainerId(int id) throws SQLException {
+        Connection con = herokuDaoFactory.connect();
+        List<Pokemon> pokemonList = new ArrayList<>();
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM trainer_pokemon WHERE trainer_id = ?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
 
-    @Override
-    public Session openSessionWithTransaction() {
-        this.currentSession = getSessionFactory().openSession();
-        this.currentTransaction = currentSession.beginTransaction();
-        return currentSession;
-    }
+            PokemonDao pokemonDao = herokuDaoFactory.getPokemonDao();
 
-    private static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration();
-        SessionFactory sessionFactory = configuration.configure().buildSessionFactory();
-        return sessionFactory;
-    }
+            while (rs.next()) {
+                int pokemonId = rs.getInt("pokemons_id");
+                Pokemon pokemon = pokemonDao.readById(pokemonId);
 
-    @Override
-    public Session getCurrentSession() {
-        return this.currentSession;
-    }
+                System.out.println("found pokemon name = " + pokemon.getName());
 
-    @Override
-    public void closeCurrentSession() {
-        this.currentSession.close();
-    }
-
-    @Override
-    public void closeSessionWithTransaction() {
-        this.currentTransaction.commit();
-        this.currentSession.close();
+                pokemonList.add(pokemon);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return pokemonList;
     }
 }

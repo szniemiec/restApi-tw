@@ -1,18 +1,12 @@
 package org.company.models.used;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Entity (name = "Trainer")
+@Entity (name = "trainer")
 @Getter
-@Setter
-@Builder
-@NoArgsConstructor
 public class Trainer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +22,12 @@ public class Trainer {
 
     @ManyToMany(
             fetch = FetchType.LAZY,
-            cascade = CascadeType.PERSIST
+            cascade = CascadeType.ALL
     )
     private List<Pokemon> pokemons;
+
+    public Trainer() {
+    }
 
     public Trainer(String firstname, String lastname, int level, int experience, String email, List<Pokemon> pokemons) {
         this.firstname = firstname;
@@ -50,10 +47,80 @@ public class Trainer {
         this.email = email;
     }
 
-    //    @OneToOne
-//    private SpecificInformation specificInformation;
+    @Override
+    public String toString() {
+        return "Trainer{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", level=" + level +
+                ", experience=" + experience +
+                ", email='" + email + '\'' +
+                ", pokemons=" + pokemons +
+                '}';
+    }
 
-//    @ManyToMany(mappedBy = "pokemon", cascade = CascadeType.PERSIST)
-//    private List<Pokemon> pokemons; // list of pokemon Id's
+    public int getId() {
+        return id;
+    }
+
+    public Trainer setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public Trainer setFirstname(String firstname) {
+        this.firstname = firstname;
+        return this;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public Trainer setLastname(String lastname) {
+        this.lastname = lastname;
+        return this;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public Trainer setLevel(int level) {
+        this.level = level;
+        return this;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public Trainer setExperience(int experience) {
+        this.experience = experience;
+        return this;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Trainer setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public List<Pokemon> getPokemons() {
+        return pokemons;
+    }
+
+    public Trainer setPokemons(List<Pokemon> pokemons) {
+        this.pokemons = pokemons;
+        return this;
+    }
 
 }
