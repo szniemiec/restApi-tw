@@ -64,7 +64,7 @@ public class ApplicationServlet extends HttpServlet {
                 // TODO:
                 return trainerService.addTrainerByRequest(httpServletRequest);
             case "stats":
-                // TODO:
+                // TODO: REDUNDANT, should be added together with pokemon
                 System.out.println("we are in case stats");
 //                return statsService.addStatsByRequest(httpServletRequest);
             default:
