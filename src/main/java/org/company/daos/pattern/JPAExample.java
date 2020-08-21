@@ -61,6 +61,16 @@ public class JPAExample {
         System.out.println("ghfjdskghfjdkghfjdkfhjd");
         System.out.println("ghfjdskghfjdkghfjdkfhjd");
         System.out.println("ghfjdskghfjdkghfjdkfhjd");
+        System.out.println("ghfjdskghfjdkghfjdkfhjd");
+        System.out.println("ghfjdskghfjdkghfjdkfhjd");
+
+        Trainer gary = trainerDao.readById(2);
+        System.out.println("trainer2 = " + gary.getFirstname());
+        System.out.println("ghfjdskghfjdkghfjdkfhjd");
+        System.out.println("ghfjdskghfjdkghfjdkfhjd");
+        System.out.println("ghfjdskghfjdkghfjdkfhjd");
+        System.out.println("ghfjdskghfjdkghfjdkfhjd");
+        System.out.println("ghfjdskghfjdkghfjdkfhjd");
 
         loadClass(em);
 
@@ -73,29 +83,48 @@ public class JPAExample {
         EntityTransaction transaction = em.getTransaction();
         // ---------------------- THE POKEMONS START
 
-        Stats stats = new Stats(23, 42);
-        Pokemon pokemon = new Pokemon(124, "Pikachu", TypeEnum.ELECTRIC, stats);
+        Stats pikachuStats = new Stats(2523233, 42);
+        Stats charizardStats = new Stats(220, 100);
+        Stats mewtwoStats = new Stats(999, 999);
+        Stats dragoniteStats = new Stats(300, 400);
+        Stats magikarpStats = new Stats(1, 1);
+
+
+        Pokemon pikachu = new Pokemon(124, "Pikachu", TypeEnum.ELECTRIC, pikachuStats);
+        Pokemon charizard = new Pokemon(6, "Charizard", TypeEnum.DRAGON, charizardStats);
+        Pokemon mewtwo = new Pokemon(150, "Mewtwo", TypeEnum.POISON, mewtwoStats);
+        Pokemon dragonite = new Pokemon(149, "Dragonite", TypeEnum.DRAGON, dragoniteStats);
+        Pokemon magikarp = new Pokemon(139, "Magikarp", TypeEnum.WATER, magikarpStats);
 
         transaction.begin();
-        em.persist(pokemon);
+        em.persist(pikachu);
+        em.persist(charizard);
+        em.persist(mewtwo);
+        em.persist(dragonite);
+        em.persist(magikarp);
         transaction.commit();
-        System.out.println("pikachu saved");
+
+        System.out.println("pokemons saved");
+
+        List<Pokemon> ashPokemonsList = new ArrayList<>();
+        ashPokemonsList.add(pikachu);
+        ashPokemonsList.add(magikarp);
+        Trainer ash = new Trainer("Ash", "Ketchum", 12, 3232, "ash@gmail.com", ashPokemonsList);
 
 
+        List<Pokemon> garyPokemonsList = new ArrayList<>();
+        garyPokemonsList.add(dragonite);
+        garyPokemonsList.add(mewtwo);
+        Trainer gary = new Trainer("Gary", "Smith", 99, 9999, "gary@gmail.com", garyPokemonsList);
 
-        Stats magikarpStats = new Stats(1, 1);
-        Pokemon magikarp = new Pokemon(139, "Magikarp", TypeEnum.WATER, magikarpStats);
-        List<Pokemon> pokemonsList = new ArrayList<>();
-        pokemonsList.add(pokemon);
-        pokemonsList.add(magikarp);
-
-        Trainer ash = new Trainer("ash", "ketchum", 12, 3232, "ash@gmail.com", pokemonsList);
         transaction.begin();
         em.persist(ash);
+        em.persist(gary);
         transaction.commit();
         // ---------------------- THE POKEMONS END
     }
-    public static void loadClass(EntityManager em){
+
+    public static void loadClass(EntityManager em) {
         em.clear();
     }
 }

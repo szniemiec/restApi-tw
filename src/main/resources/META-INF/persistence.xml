@@ -22,9 +22,12 @@
             <property name="javax.persistence.schema-generation.scripts.drop-target" value="src/main/resources/META-INF/drop-schema.ddl"/>
 
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://ec2-46-137-100-204.eu-west-1.compute.amazonaws.com:5432/d6a8osfmuvq4h3"/>
-            <property name="javax.persistence.jdbc.user" value="vviowpmysaljur"/>
-            <property name="javax.persistence.jdbc.password" value="b8f03f5b442dac4b367ff229ebe1a209edbbcaba9ae754d5053125801ce4d3ec"/>
+<!--            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://ec2-46-137-100-204.eu-west-1.compute.amazonaws.com:5432/d6a8osfmuvq4h3"/>-->
+<!--            <property name="javax.persistence.jdbc.user" value="vviowpmysaljur"/>-->
+            <!--            <property name="javax.persistence.jdbc.password" value="b8f03f5b442dac4b367ff229ebe1a209edbbcaba9ae754d5053125801ce4d3ec"/>-->
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/thepokemonsdb"/>
+            <property name="javax.persistence.jdbc.user" value="postgres"/>
+            <property name="javax.persistence.jdbc.password" value="admin"/>
             <!--<property name="javax.persistence.sql-load-script-source" value="insert.sql"/>-->
         </properties>
     </persistence-unit>
