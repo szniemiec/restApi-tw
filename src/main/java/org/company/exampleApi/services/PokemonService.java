@@ -45,7 +45,7 @@ public class PokemonService {
 //        TODO:
     }
 
-    public List<Pokemon> getAllPokemons() {
+    public List<Pokemon> getAllPokemons() throws SQLException {
         return this.pokemonDao.getAllElements();
     }
 
@@ -82,6 +82,7 @@ public class PokemonService {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             em.persist(newPokemon);
+            em.persist(pokemonStats);
             transaction.commit();
 
             return "Pokemon added";

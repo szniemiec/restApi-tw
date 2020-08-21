@@ -40,7 +40,7 @@ public class StatsService {
 //        TODO:
     }
 
-    public List<Stats> getAllStats() {
+    public List<Stats> getAllStats() throws SQLException {
         return this.statsDao.getAllElements();
     }
 

@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JPAExample {
+public class Main {
     public static void main(String[] args) throws SQLException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
         EntityManager em = emf.createEntityManager();

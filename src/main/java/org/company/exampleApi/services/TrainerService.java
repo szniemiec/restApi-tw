@@ -2,12 +2,9 @@ package org.company.exampleApi.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.company.exampleApi.daos.TrainerDao;
-import org.company.exampleApi.models.Pokemon;
-import org.company.exampleApi.models.Stats;
 import org.company.exampleApi.models.Trainer;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +33,7 @@ public class TrainerService {
 //        TODO:
     }
 
-    public List<Trainer> getAllTrainers() {
+    public List<Trainer> getAllTrainers() throws SQLException {
         return this.trainerDao.getAllElements();
     }
 
