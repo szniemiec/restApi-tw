@@ -36,6 +36,7 @@ public class TrainerService {
     public void deleteTrainerById(int id) {
         this.trainerDao.delete(id);
     }
+
     public void updateTrainer(int id) {
 //        TODO:
     }
@@ -48,7 +49,7 @@ public class TrainerService {
         JSONService jsonService = new JSONService();
 
         // Returns Trainers pokemons
-        if(mapOfUri.containsKey("myPokemons")) {
+        if (mapOfUri.containsKey("myPokemons")) {
             Trainer trainer = getTrainerById(Integer.parseInt(mapOfUri.get("id")));
             return jsonService.convertObjectToJson(trainer.getPokemons());
         }
@@ -65,7 +66,6 @@ public class TrainerService {
 
     public String deleteTrainerByRequest(HttpServletRequest httpServletRequest) throws SQLException {
         int trainerIdToDelete = Integer.parseInt(httpServletRequest.getParameter("id"));
-
 
         if (isPresent(trainerIdToDelete)) {
             this.trainerDao.delete(trainerIdToDelete);
