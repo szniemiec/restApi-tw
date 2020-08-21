@@ -1,12 +1,12 @@
 package org.company.exampleApi.servlets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import lombok.SneakyThrows;
+import org.company.exampleApi.daos.pattern.DaoFactory;
+import org.company.exampleApi.daos.pattern.HerokuDaoFactory;
 import org.company.exampleApi.services.PokemonService;
 import org.company.exampleApi.services.StatsService;
 import org.company.exampleApi.services.TrainerService;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +17,11 @@ import java.util.*;
 
 @WebServlet(name = "PokemonController", urlPatterns = {"/pokemons"}, loadOnStartup = 1)
 public class ApplicationServlet extends HttpServlet {
-    private final PokemonService pokemonService = new PokemonService();
-    private final TrainerService trainerService = new TrainerService();
-    private final StatsService statsService = new StatsService();
+    private final DaoFactory daoFactory = new HerokuDaoFactory();
+
+    private final PokemonService pokemonService = new PokemonService(daoFactory.getPokemonDao());
+    private final TrainerService trainerService = new TrainerService(daoFactory.getTrainerDao());
+    private final StatsService statsService = new StatsService(daoFactory.getStatsDao());
 
 
     @Override
@@ -106,7 +108,7 @@ public class ApplicationServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         String uri = httpServletRequest.getRequestURI();
         Map<String, String> uriMap = mapUriString(uri);
-        String response = null;
+        String response = "";
         try {
             response = deleteRecord(uriMap, httpServletRequest);
         } catch (SQLException throwables) {

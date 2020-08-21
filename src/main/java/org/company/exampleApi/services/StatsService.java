@@ -2,15 +2,14 @@ package org.company.exampleApi.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.company.exampleApi.daos.StatsDao;
-import org.company.exampleApi.models.Pokemon;
 import org.company.exampleApi.models.Stats;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class StatsService {
+
     private StatsDao statsDao;
 
     public StatsService(StatsDao statsDao) {
@@ -25,11 +24,6 @@ public class StatsService {
     }
 
     public void addStats(Stats stats) {
-
-
-
-
-
         this.statsDao.create(stats);
     }
 

@@ -3,7 +3,8 @@ package org.company.exampleApi.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.company.exampleApi.daos.Dao;
 import org.company.exampleApi.daos.PokemonDao;
-import org.company.exampleApi.daos.StatsDao;
+import org.company.exampleApi.daos.pattern.DaoFactory;
+import org.company.exampleApi.daos.pattern.HerokuDaoFactory;
 import org.company.exampleApi.enums.TypeEnum;
 import org.company.exampleApi.models.Pokemon;
 import org.company.exampleApi.models.Stats;
@@ -14,13 +15,14 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PokemonService {
-    private PokemonDao pokemonDao;
 
+    // TODO: How to make it with depnedency injection
+    private final DaoFactory daoFactory = new HerokuDaoFactory();
+    private PokemonDao pokemonDao = daoFactory.getPokemonDao();
 
     public PokemonService(PokemonDao pokemonDao) {
         this.pokemonDao = pokemonDao;
