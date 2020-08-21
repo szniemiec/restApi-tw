@@ -21,7 +21,7 @@ public class Pokemon {
     @Enumerated
     private TypeEnum typeEnum;
 
-    @OneToOne(mappedBy = "pokemon", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "pokemon", cascade = CascadeType.ALL)
     private Stats stats;
 
     public Pokemon() {
