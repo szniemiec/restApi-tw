@@ -1,6 +1,8 @@
 package org.company.exampleApi.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.company.exampleApi.daos.StatsDao;
+import org.company.exampleApi.models.Pokemon;
 import org.company.exampleApi.models.Stats;
 
 import java.sql.SQLException;
@@ -42,13 +44,16 @@ public class StatsService {
         return this.statsDao.getAllElements();
     }
 
-    public String getStatsAsJson(Map<String, String> uri) {
-        String objectAsJson = "";
+    public String getStatsAsJson(Map<String, String> uriAsMap) throws SQLException, JsonProcessingException {
+        JSONService jsonService = new JSONService();
 
+        if (uriAsMap.containsKey("id")) {
+            Stats stats = getStatsById(Integer.parseInt(uriAsMap.get("id")));
+            return jsonService.convertObjectToJson(stats);
+        }
 
-
-
-        return objectAsJson;
+        List<Stats> stats = getAllStats();
+        return jsonService.convertObjectToJson(stats);
     }
 
 }

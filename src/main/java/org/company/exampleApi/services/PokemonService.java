@@ -41,7 +41,7 @@ public class PokemonService {
         this.pokemonDao.delete(id);
     }
 
-    public void updateTrainer(int id) {
+    public void updatePokemon(int id) {
 //        TODO:
     }
 
@@ -118,7 +118,7 @@ public class PokemonService {
                     return TypeEnum.WATER;
                 case "GRASS":
                     return TypeEnum.GRASS;
-                case "ELECTRIC":
+                case "ELECTRIC":g
                     return TypeEnum.ELECTRIC;
                 case "POISON":
                     return TypeEnum.POISON;
@@ -131,4 +131,5 @@ public class PokemonService {
             return TypeEnum.NONE;
         }
     }
+
 }

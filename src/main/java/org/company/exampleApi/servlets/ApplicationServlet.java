@@ -15,48 +15,34 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
-@WebServlet (name = "PokemonController", urlPatterns = {"/pokemons"}, loadOnStartup = 1)
+@WebServlet(name = "PokemonController", urlPatterns = {"/pokemons"}, loadOnStartup = 1)
 public class ApplicationServlet extends HttpServlet {
-    private PokemonService pokemonService = new PokemonService();
-    private TrainerService trainerService = new TrainerService();
-    private StatsService statsService = new StatsService();
+    private final PokemonService pokemonService = new PokemonService();
+    private final TrainerService trainerService = new TrainerService();
+    private final StatsService statsService = new StatsService();
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getMethod().equals("GET")) {
-            resp.setStatus(200);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setStatus(200);
+        System.out.println("req uri = " + req.getRequestURI());
+        System.out.println("req servlet path = " + req.getServletPath());
 
-
-            System.out.println("req = " + req);
-            System.out.println("req uri = " + req.getRequestURI());
-            System.out.println("req path translated = " + req.getPathTranslated());
-            System.out.println("req method = " + req.getMethod());
-            System.out.println("req servlet path = " + req.getServletPath());
-            System.out.println("resp status = " + resp.getStatus());
-
-
-            Map<String, String> uriAsMap = mapUriString(req.getRequestURI());
-            String response = "";
-            try {
-                response = getEntityString(uriAsMap);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-
-            System.out.println("response = " + response);
-            resp.getWriter().write(response);
-            resp.getWriter().println("Heelo");
+        Map<String, String> uriAsMap = mapUriString(req.getRequestURI());
+        String response = "";
+        try {
+            response = getRecordString(uriAsMap);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
 
-
-
-
-        super.doGet(req, resp);
+        System.out.println("response = " + response);
+        resp.getWriter().write(response);
+        resp.getWriter().println("Heelo");
     }
 
     @Override
-    protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         String uri = httpServletRequest.getRequestURI();
         Map<String, String> uriMap = mapUriString(uri);
         String response = addNewRecord(uriMap, httpServletRequest);
@@ -82,21 +68,50 @@ public class ApplicationServlet extends HttpServlet {
             default:
                 return "Invalid input";
         }
-
-
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
-    }
-
-    @SneakyThrows
-    @Override
-    protected void doDelete(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         String uri = httpServletRequest.getRequestURI();
         Map<String, String> uriMap = mapUriString(uri);
-        String response = deleteRecord(uriMap, httpServletRequest);
+        String response = "";
+        response = updateRecord(uriMap, httpServletRequest);
+
+        System.out.println(response);
+        httpServletResponse.getWriter().write(response);
+    }
+
+    private String updateRecord(Map<String, String> uriMap, HttpServletRequest httpServletRequest) {
+        String serviceType = uriMap.get("typeOfService");
+
+        switch (serviceType) {
+            case "pokemons":
+                System.out.println("we are in case pokemons");
+                // TODO:
+//                return pokemonService.updatePokemonByRequest(httpServletRequest);
+            case "trainers":
+                System.out.println("we are in case trainers");
+                // TODO:
+//                return trainerService.updateTrainerByRequest(httpServletRequest);
+            case "stats":
+                // TODO:
+                System.out.println("we are in case stats");
+//                return statsService.updateStatsByRequest(httpServletRequest);
+            default:
+                return "Invalid input";
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+        String uri = httpServletRequest.getRequestURI();
+        Map<String, String> uriMap = mapUriString(uri);
+        String response = null;
+        try {
+            response = deleteRecord(uriMap, httpServletRequest);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         System.out.println(response);
         httpServletResponse.getWriter().write(response);
@@ -119,7 +134,6 @@ public class ApplicationServlet extends HttpServlet {
             default:
                 return "Invalid input";
         }
-
     }
 
     private Map<String, String> mapUriString(String uri) {
@@ -145,7 +159,7 @@ public class ApplicationServlet extends HttpServlet {
         return uriMap;
     }
 
-    private String getEntityString(Map<String, String> uriMap) throws JsonProcessingException, SQLException {
+    private String getRecordString(Map<String, String> uriMap) throws JsonProcessingException, SQLException {
         String serviceType = uriMap.get("typeOfService");
         switch (serviceType) {
             case "pokemons":

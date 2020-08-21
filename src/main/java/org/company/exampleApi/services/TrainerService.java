@@ -1,6 +1,8 @@
 package org.company.exampleApi.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.company.exampleApi.daos.TrainerDao;
+import org.company.exampleApi.models.Pokemon;
 import org.company.exampleApi.models.Stats;
 import org.company.exampleApi.models.Trainer;
 
@@ -38,13 +40,16 @@ public class TrainerService {
         return this.trainerDao.getAllElements();
     }
 
-    public String getTrainerAsJson(Map<String, String> uri) {
-        String objectAsJson = "";
+    public String getTrainerAsJson(Map<String, String> mapOfUri) throws SQLException, JsonProcessingException {
+        JSONService jsonService = new JSONService();
 
+        if (mapOfUri.containsKey("id")) {
+            Trainer trainer = getTrainerById(Integer.parseInt(mapOfUri.get("id")));
+            return jsonService.convertObjectToJson(trainer);
+        }
 
-
-
-        return objectAsJson;
+        List<Trainer> trainers = getAllTrainers();
+        return jsonService.convertObjectToJson(trainers);
 
     }
 
